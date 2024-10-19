@@ -51,7 +51,13 @@ return {
       },
       -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
       { '<F7>', dapui.toggle, desc = 'Debug: See last session result.' },
-      { '<leader>?', dapui.eval(nil, { enter = true }), desc = 'Eval var under cursor' },
+      {
+        '<leader>?',
+        function()
+          dapui.eval(nil, { enter = true })
+        end,
+        desc = 'Eval var under cursor',
+      },
       unpack(keys),
     }
   end,
@@ -83,19 +89,19 @@ return {
       --    Feel free to remove or use ones that you like more! :)
       --    Don't feel like these are good choices.
       icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
-      controls = {
-        icons = {
-          pause = '⏸',
-          play = '▶',
-          step_into = '⏎',
-          step_over = '⏭',
-          step_out = '⏮',
-          step_back = 'b',
-          run_last = '▶▶',
-          terminate = '⏹',
-          disconnect = '⏏',
-        },
-      },
+      -- controls = {
+      --   icons = {
+      --     pause = '⏸',
+      --     play = '▶',
+      --     step_into = '⏎',
+      --     step_over = '⏭',
+      --     step_out = '⏮',
+      --     step_back = 'b',
+      --     run_last = '▶▶',
+      --     terminate = '⏹',
+      --     disconnect = '⏏',
+      --   },
+      -- },
     }
 
     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
@@ -115,7 +121,7 @@ return {
 
     -- C/C++, Rust
     require('overseer').setup {
-      templates = { 'builtin', 'user.cpp_build' },
+      templates = { 'builtin', 'user.c_build', 'user.c_clean' },
     }
     dap.adapters.codelldb = {
       type = 'server',
@@ -133,6 +139,7 @@ return {
         cwd = '${workspaceFolder}',
         program = '${workspaceFolder}/${fileBasenameNoExtension}',
         preLaunchTask = 'Clang C build',
+        postDebugTask = 'Clean',
         stopOnEntry = false,
       },
     }
