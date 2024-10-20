@@ -121,7 +121,7 @@ return {
 
     -- C/C++, Rust
     require('overseer').setup {
-      templates = { 'builtin', 'user.c_build', 'user.c_clean' },
+      templates = { 'builtin', 'user.c_build', 'user.cpp_build', 'user.c_clean' },
     }
     dap.adapters.codelldb = {
       type = 'server',
@@ -139,6 +139,18 @@ return {
         cwd = '${workspaceFolder}',
         program = '${workspaceFolder}/${fileBasenameNoExtension}',
         preLaunchTask = 'Clang C build',
+        postDebugTask = 'Clean',
+        stopOnEntry = false,
+      },
+    }
+    dap.configurations.cpp = {
+      {
+        name = 'C++',
+        type = 'codelldb',
+        request = 'launch',
+        cwd = '${workspaceFolder}',
+        program = '${workspaceFolder}/${fileBasenameNoExtension}',
+        preLaunchTask = 'Clang C++ build',
         postDebugTask = 'Clean',
         stopOnEntry = false,
       },
